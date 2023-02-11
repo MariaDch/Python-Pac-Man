@@ -62,8 +62,8 @@ hard_img = pygame.image.load('asserts/buttons/hard.png').convert_alpha()
 play_button = Button(250, 125, play_img, 1)
 quit_button = Button(250, 300, quit_img, 1)
 easy_button = Button(250, 75, easy_img, 1)
-hard_button = Button(250, 200, hard_img, 1)
-medium_button = Button(250, 325, medium_img, 1)
+medium_button = Button(250, 200, medium_img, 1)
+hard_button = Button(250, 325, hard_img, 1)
 back_button = Button(250, 450, back_img, 1)
 
 
@@ -83,6 +83,8 @@ while run:
         # draw pause screen buttons
         if play_button.draw(screen):
             menu_state = 'difficulties'
+            easy_button.clicked = True
+            medium_button.clicked = True
         if quit_button.draw(screen):
             run = False
     # check if the options menu is open

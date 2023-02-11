@@ -677,34 +677,34 @@ def start_pacman(lvl):
                 eatenGhosts = [False, False, False, False]
         return _score, power_up, power_count, eatenGhosts
 
-    def draw_board(lvl, v_color):
+    def draw_board(v_color):
         num1 = (HEIGHT - 50) // 32
         num2 = WIDTH // 30
-        for i in range(len(lvl)):
-            for j in range(len(lvl[i])):
-                if lvl[i][j] == 1:
+        for i in range(len(level)):
+            for j in range(len(level[i])):
+                if level[i][j] == 1:
                     pygame.draw.circle(screen, 'white', (j * num2 + 0.5 * num2, i * num1 + 0.5 * num1), 3)
-                if lvl[i][j] == 2 and not flicker:
+                if level[i][j] == 2 and not flicker:
                     pygame.draw.circle(screen, 'white', (j * num2 + 0.5 * num2, i * num1 + 0.5 * num1), 8)
-                if lvl[i][j] == 3:
+                if level[i][j] == 3:
                     pygame.draw.line(screen, v_color, (j * num2 + 0.5 * num2, i * num1), (j * num2 + 0.5 * num2,
                                                                                           i * num1 + num1), 2)
-                if lvl[i][j] == 4:
+                if level[i][j] == 4:
                     pygame.draw.line(screen, v_color, (j * num2, i * num1 + 0.5 * num1), (j * num2 + num2,
                                                                                           i * num1 + 0.5 * num1), 2)
-                if lvl[i][j] == 5:
+                if level[i][j] == 5:
                     pygame.draw.arc(screen, v_color, [(j * num2 - num2 * 0.4) - 2, i * num1 + 0.5 * num1, num2, num1]
                                     , 0, PI / 2, 2)
-                if lvl[i][j] == 6:
+                if level[i][j] == 6:
                     pygame.draw.arc(screen, v_color, [j * num2 + num2 * 0.5, i * num1 + 0.5 * num1, num2, num1]
                                     , PI / 2, PI, 2)
-                if lvl[i][j] == 7:
+                if level[i][j] == 7:
                     pygame.draw.arc(screen, v_color, [j * num2 + num2 * 0.5, i * num1 - 0.4 * num1, num2, num1]
                                     , PI, 3 * PI / 2, 2)
-                if lvl[i][j] == 8:
+                if level[i][j] == 8:
                     pygame.draw.arc(screen, v_color, [(j * num2 - num2 * 0.4) - 2, i * num1 - 0.4 * num1, num2, num1]
                                     , 3 * PI / 2, 2 * PI, 2)
-                if lvl[i][j] == 9:
+                if level[i][j] == 9:
                     pygame.draw.line(screen, 'white', (j * num2, i * num1 + 0.5 * num1), (j * num2 + num2,
                                                                                           i * num1 + 0.5 * num1), 2)
 
@@ -718,7 +718,7 @@ def start_pacman(lvl):
         elif direction == 3:  # DOWN
             screen.blit(pygame.transform.rotate(player_images[counter // 5], 270), (player_x, player_y))
 
-    def check_position(centerX, centerY, lvl):
+    def check_position(centerX, centerY):
         turns = [False, False, False, False]
         num1 = (HEIGHT - 50) // 32
         num2 = (WIDTH // 30)
@@ -908,7 +908,7 @@ def start_pacman(lvl):
         if clyde_dead:
             ghosts_speeds[3] = 4
         screen.fill('black')
-        draw_board(level, color)
+        draw_board(color)
 
         game_won = True
         for i in range(len(level)):
@@ -929,7 +929,7 @@ def start_pacman(lvl):
         display_items()
         ghost_targets = get_targets(blinky_x, blinky_y, inky_x, inky_y, pinky_x, pinky_y, clyde_x, clyde_y)
         pygame.draw.circle(screen, 'white', (center_x, center_y), 2)
-        can_turn_to = check_position(center_x, center_y, level)
+        can_turn_to = check_position(center_x, center_y)
         if moving:
             player_x, player_y = move_player(player_x, player_y)
             if not blinky_dead and not blinky_in_box:
@@ -953,8 +953,10 @@ def start_pacman(lvl):
                     (player_circle.colliderect(pinky.rect) and not pinky.is_dead) or \
                     (player_circle.colliderect(clyde.rect) and not clyde.is_dead):
                 if lives > 0:
-                    lives -= 1
-
+                    lives, startup_counter, powerUp, powerCount, player_x, player_y, direction, direction_command, \
+                    counter, blinky_x, blinky_y, blinky_direction, inky_x, inky_y, inky_direction, pinky_x, pinky_y, \
+                    pinky_direction, clyde_x, clyde_y, clyde_direction, eaten_ghosts, blinky_dead, inky_dead, clyde_dead, \
+                    pinky_dead = reinitialize(lives - 1)
                 else:
                     game_over = True
                     moving = False
@@ -1029,6 +1031,7 @@ def start_pacman(lvl):
                     counter, blinky_x, blinky_y, blinky_direction, inky_x, inky_y, inky_direction, pinky_x, pinky_y, \
                     pinky_direction, clyde_x, clyde_y, clyde_direction, eaten_ghosts, blinky_dead, inky_dead, clyde_dead, \
                     pinky_dead = reinitialize(3)
+                    level = copy.deepcopy(boards[lvl])
                     game_over = False
                     game_won = False
             if event.type == pygame.KEYUP:
