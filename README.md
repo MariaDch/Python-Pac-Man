@@ -1,5 +1,5 @@
 # Pac-PyMan
-![](https://i.pinimg.com/564x/5c/62/7d/5c627dbe17a532ffa64f003fcf950a06.jpg)
+![](https://i.pinimg.com/564x/5c/62/7d/5c627dbe17a532ffa64f003fcf950a06.jpg) <br>
 This project is replication of the game Pac-Man. The game has 3 levels:
 - Easy
 - Medium
