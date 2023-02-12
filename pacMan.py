@@ -38,6 +38,8 @@ def start_pacman(lvl):
     clyde_image = pygame.transform.scale(pygame.image.load(f'asserts/ghosts/4.png'), (35, 35))
     dead_image = pygame.transform.scale(pygame.image.load(f'asserts/ghosts/5.png'), (35, 35))
     eyes_image = pygame.transform.scale(pygame.image.load(f'asserts/ghosts/6.png'), (20, 20))
+    game_over_image = pygame.transform.scale(pygame.image.load(f'asserts/game_over.jpg'), (350, 350))
+    game_win_image = pygame.transform.scale(pygame.image.load(f'asserts/game_win.png'), (350, 350))
 
     lives, startup_counter, powerUp, powerCount, player_x, player_y, direction, direction_command, \
     counter, blinky_x, blinky_y, blinky_direction, inky_x, inky_y, inky_direction, pinky_x, pinky_y, \
@@ -654,13 +656,17 @@ def start_pacman(lvl):
         for i in range(lives):
             screen.blit(pygame.transform.scale(player_images[0], (25, 25)), (600 + i * 30, 720))
         if game_over:
-            pygame.draw.rect(screen, 'white', [30, 180, 690, 280], 0, 10)
-            pygame.draw.rect(screen, 'dark gray', [30, 180, 690, 280], 0, 10)
-            game_over_text = my_font.render('Game over! Press Space bar to restart!', True, 'red')
-            screen.blit(game_over_text, (100, 300))
+            screen.blit(game_over_image, (200, 250))
+            text = my_font.render(f'TO RESTART PRESS SPACE!', True, 'white')
+            screen.blit(text, (250, 300))
         if game_won:
             if lvl < 2:
                 start_pacman(lvl + 1)
+            elif lvl == 2:
+                screen.blit(game_win_image, (200, 250))
+                text = my_font.render(f'TO RESTART PRESS SPACE!', True, 'white')
+                screen.blit(text, (250, 300))
+
 
     def check_collisions(_score, power_up, power_count, eatenGhosts):
         num1 = (HEIGHT - 50) // 32
@@ -1031,7 +1037,7 @@ def start_pacman(lvl):
                     counter, blinky_x, blinky_y, blinky_direction, inky_x, inky_y, inky_direction, pinky_x, pinky_y, \
                     pinky_direction, clyde_x, clyde_y, clyde_direction, eaten_ghosts, blinky_dead, inky_dead, clyde_dead, \
                     pinky_dead = reinitialize(3)
-                    level = copy.deepcopy(boards[lvl])
+                    level = copy.deepcopy(boards[0])
                     game_over = False
                     game_won = False
             if event.type == pygame.KEYUP:
